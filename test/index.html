@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+	<title>Moonridge react example</title>
+</head>
+<body>
+
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
+<script type="text/javascript" src="/jspm_packages/github/mochajs/mocha@2.2.5/mocha.js"></script>
+
+<script>
+	System.import('app.jsx!jsx').then(function() {
+		mocha.setup('bdd');
+
+		if (window.mochaPhantomJS) {
+			mochaPhantomJS.run();
+		} else { mocha.run(function() {
+			console.log('tests ran at ', new Date());
+		}); }
+	}, console.error.bind(console));
+</script>
+</body>
+</html>
