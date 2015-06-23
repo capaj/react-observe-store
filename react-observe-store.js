@@ -1,14 +1,8 @@
-import observer from 'observe-js';
-const PathObserver = observer.PathObserver;
-const ArrayObserver = observer.ArrayObserver;
-const ObjectObserver = observer.ObjectObserver;
-
-var deepGetter = function(obj, path){
-	for (var i=0, path=path.split('.'), len=path.length; i<len; i++){
-		obj = obj[path[i]];
-	}
-	return obj;
-};
+import observe from 'observe-js';
+const PathObserver = observe.PathObserver;
+const ArrayObserver = observe.ArrayObserver;
+const ObjectObserver = observe.ObjectObserver;
+const Path = observe.Path;
 
 /**
  * @param {Object} comp react component
@@ -22,7 +16,8 @@ export default function observeStore(comp, store, varName){
 	if (storeAcessors) {
 		const observers = storeAcessors.map((path) => {
 			path = path.substr(varName.length + 1);
-			var val = deepGetter(store, path);
+			var pathObj = Path.get(path);
+			var val = pathObj.getValueFrom(store);
 			var observer;
 			if (Array.isArray(val)) {
 				observer = new ArrayObserver(val);
