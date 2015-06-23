@@ -10,4 +10,13 @@ describe('react-observe-store', function() {
 			//TODO implement
 		});
     });
+	
+	describe('regex matcher', function() {
+	    it('should match when accessing a prop by index(brackets)', function(){
+	        
+	    }); 
+		it('should match when accessing a prop by dot notation', function(){
+
+		});
+	});
 });

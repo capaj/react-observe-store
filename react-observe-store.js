@@ -11,7 +11,7 @@ const Path = observe.Path;
  */
 export default function observeStore(comp, store, varName){
 	const renderString = comp.render.toString();
-	const reg = new RegExp(varName + '\\S*\\b', 'ig');
+	const reg = new RegExp(varName + '.*?(?=\\))', 'ig');
 	const storeAcessors = renderString.match(reg);
 	if (storeAcessors) {
 		const observers = storeAcessors.map((path) => {
