@@ -2,7 +2,7 @@
 a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component
 
 ## Does it work?
-Yes, it is thouroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable known only in render time.
+Yes, it is thouroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
 For example:
 ```
 const store = {a: 1, b:2, c:4};
@@ -11,7 +11,7 @@ constructor(){
 	this.myProp = 'b';
 }
 render(){
-	return <div>{store[this.myProp]}</div>	//won't be observed automagically 
+	return <div>{store[this.myProp]}</div>	//won't be observed automagically :-(
 	return <div>{store.b}</div>		//works, automagically observes
 	return <div>{store['b']}</div>	//works, automagically observes
 }
