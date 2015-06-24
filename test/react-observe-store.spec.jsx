@@ -82,4 +82,18 @@ describe('react-observe-store', function() {
 
 		});
 	});
+	
+	describe('multiple components using one store', function() {
+		it('should only create one one observer if two components are observing the same path', function(){
+		    //TODO implement(not even implemented in the algorithm itself)
+		});
+		
+		it('should not close the observer if one of the two components is unmounted', function(){
+			//TODO implement(not even implemented in the algorithm itself)
+		});
+		
+		it('should close the observer when all of the components are unmounted', function(){
+			//TODO implement(not even implemented in the algorithm itself)
+		});
+	});
 });
