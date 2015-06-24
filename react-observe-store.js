@@ -17,10 +17,11 @@ export default function observeStore(comp, store, varName){
 
 	/**
 	 * @param {String} path
-	 * @param {Object} obs observer
+	 * @param {Function} observerCreateFn function which returns the observer
 	 */
-	const observePath = function(path, obs) {
+	const observePath = function(path, observerCreateFn) {
 		if (!observersByPaths[path]) {
+			let obs = observerCreateFn();
 			observersByPaths[path] = obs;
 
 			obs.open(() => {
@@ -28,8 +29,6 @@ export default function observeStore(comp, store, varName){
 			});
 
 			//console.log('registered an observer for path', path);
-		} else {
-			obs.close();
 		}
 	};
 	if (storeAcessors) {
@@ -38,26 +37,34 @@ export default function observeStore(comp, store, varName){
 			const pathObj = Path.get(path);
 			const val = pathObj.getValueFrom(store);
 			const type = typeof val;
-			let observer;
+			let createObserver;
 			if (Array.isArray(val)) {
-				observer = new ArrayObserver(val);
+				createObserver = function() {
+					return new ArrayObserver(val);
+				}
 			} else if(type === 'object'){
-				observer = new 	ObjectObserver(val);
+				createObserver = function() {
+					return new ObjectObserver(val);
+				}
 			} else if(type === 'function') {
 				path = path.substring(0, path.lastIndexOf('.'));
 
 				const parentVal = Path.get(path).getValueFrom(store);
 				if (Array.isArray(parentVal)) {
-					observer = new ArrayObserver(parentVal);	// so last part of the path was an array methods
+					createObserver = function() {
+						return new ArrayObserver(parentVal); // so last part of the path was an array methods
+					};
 				} else {
 					throw new Error('stores methods should not be invoked from component render methods');
 					//stores should not have getter methods, they should be POJO objects, maybe with some setter methods
 				}
 
 			} else {
-				observer = new PathObserver(store, path);
+				createObserver = function() {
+					return new PathObserver(store, path);
+				}
 			}
-			observePath(path, observer);
+			observePath(path, createObserver);
 		});
 
 		var originalUnmount = comp.componentWillUnmount;
