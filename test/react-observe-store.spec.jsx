@@ -66,6 +66,10 @@ describe('react-observe-store', function() {
 			it('should work for array methods(but watch the array)', function(){
 				//TODO implement
 			});
+
+			it('should work for array methods(but watch the array) even when they are accessed with square bracket syntax', function(){
+				//TODO implement
+			});
 		});
 
 	});
