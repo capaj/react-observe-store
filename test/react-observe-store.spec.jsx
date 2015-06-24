@@ -58,9 +58,16 @@ describe('react-observe-store', function() {
 		it('should work for objects', function() {
 			//TODO implement
 		});
-		it('should work for arrays', function() {
-			//TODO implement
+		describe('arrays', function() {
+			it('should work for arrays', function() {
+				//TODO implement
+			});
+
+			it('should work for array methods(but watch the array)', function(){
+				//TODO implement
+			});
 		});
+
 	});
 
 	describe('regex matcher', function() {
