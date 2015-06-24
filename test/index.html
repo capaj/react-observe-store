@@ -12,18 +12,23 @@
 	System.config({
 		baseURL: '../'
 	});
-	System.import('test/react-observe-store.spec.jsx!').then(function() {
+	System.import('mocha').then(function(mocha){
 
-		if (window.mochaPhantomJS) {
-			mochaPhantomJS.run();
-		} else {
-			mocha.run(function() {
-				console.log('tests ran at ', new Date());
-			});
-		}
-	}, function(e) {
-		console.error(e);
+		mocha.setup('bdd');
+		System.import('test/react-observe-store.spec.jsx!').then(function() {
+
+			if (window.mochaPhantomJS) {
+				mochaPhantomJS.run();
+			} else {
+				mocha.run(function() {
+					console.log('tests ran at ', new Date());
+				});
+			}
+		}, function(e) {
+			console.error(e);
+		});
 	});
+
 </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ const ArrayObserver = observe.ArrayObserver;
 const ObjectObserver = observe.ObjectObserver;
 const Path = observe.Path;
 
+import stripLastPropertyAcessor from './util/stripLastPropertyAcessor'
 /**
  * @param {Object} comp react component
  * @param {Object} store object you use to store state in
@@ -47,7 +48,7 @@ export default function observeStore(comp, store, varName){
 					return new ObjectObserver(val);
 				}
 			} else if(type === 'function') {
-				path = path.substring(0, path.lastIndexOf('.'));
+				path = stripLastPropertyAcessor(path);
 
 				const parentVal = Path.get(path).getValueFrom(store);
 				if (Array.isArray(parentVal)) {
@@ -55,7 +56,7 @@ export default function observeStore(comp, store, varName){
 						return new ArrayObserver(parentVal); // so last part of the path was an array methods
 					};
 				} else {
-					throw new Error('stores methods should not be invoked from component render methods');
+					throw new Error('store methods should not be invoked from component render methods, path: ', path);
 					//stores should not have getter methods, they should be POJO objects, maybe with some setter methods
 				}
 

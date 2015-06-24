@@ -1,16 +1,15 @@
-import observeStore from '../react-observe-store';
-import mocha from 'mocha';
 import chai from 'chai';
+import observeStore from '../react-observe-store';
 import sinon from 'sinon';
-mocha.setup('bdd');
 var expect = chai.expect;
 
-describe('react-observe-store', function() {
-	describe('calling forceUpdate on a component', function() {
-		var comp;
-		var store;
+import stripLastPropertyAcessorSpec from './util/stripLastPropertyAcessor.spec';
 
-		beforeEach(function() {
+describe('react-observe-store', function() {
+	var comp;
+	var store;
+	var prepareFakeComponent = function(renderFn){
+		return function() {
 			store = {
 				c: 0,
 				arr: [0, 1],
@@ -21,25 +20,29 @@ describe('react-observe-store', function() {
 
 			comp = {
 				forceUpdate: sinon.spy(),
-				render: function() {
-					return <div>
-						<span>counter is {state.c}</span>
-						<button onClick={this.increment}>Increment</button>
-						<button onClick={this.decrement}>Decrement</button>
-						<br/>
-						<span>arr has {state.arr}</span>
-						<button onClick={this.push}>push</button>
-						<button onClick={this.pop}>pop</button>
-						<br/>
-						<span>obj is {JSON.stringify(state.obj)}</span>
-						<button onClick={this.incrementObj}>Increment object prop</button>
-						<button onClick={this.decrementObj}>Decrement object prop</button>
-
-					</div>;
-				}
+				render: renderFn
 			};
-			observeStore(comp, store, 'state');
-		});
+			observeStore(comp, store, 'store');
+		};
+	};
+	describe('calling forceUpdate on a component', function() {
+
+		beforeEach(prepareFakeComponent(function() {
+			return <div>
+				<span>counter is {store.c}</span>
+				<button onClick={this.increment}>Increment</button>
+				<button onClick={this.decrement}>Decrement</button>
+				<br/>
+				<span>arr has {store.arr}</span>
+				<button onClick={this.push}>push</button>
+				<button onClick={this.pop}>pop</button>
+				<br/>
+				<span>obj is {JSON.stringify(store.obj)}</span>
+				<button onClick={this.incrementObj}>Increment object prop</button>
+				<button onClick={this.decrementObj}>Decrement object prop</button>
+
+			</div>;
+		}));
 
 		it('should work for simple values', function(done) {
 			store.c += 1;
@@ -55,20 +58,48 @@ describe('react-observe-store', function() {
 				});
 			});
 		});
-		it('should work for objects', function() {
-			//TODO implement
+		it('should work for objects', function(done) {
+			store.obj.count += 1;
+			setTimeout(function(){
+				expect(comp.forceUpdate.callCount).to.equal(1);
+				done();
+			});
 		});
 		describe('arrays', function() {
-			it('should work for arrays', function() {
-				//TODO implement
+			it('should work for arrays', function(done) {
+				store.arr.push(store.arr.length + 1);
+				setTimeout(function(){
+					expect(comp.forceUpdate.callCount).to.equal(1);
+					done();
+				});
 			});
 
-			it('should work for array methods(but watch the array)', function(){
-				//TODO implement
+			it('should work for array method map(but watch the array)', function(done){
+				prepareFakeComponent(function() {
+					return <ul>{store.arr.map((number)=>{
+						<li key={number}>{number}</li>
+					})}</ul>;
+				})();
+
+				store.arr.push(store.arr.length + 1);
+				setTimeout(function(){
+					expect(comp.forceUpdate.callCount).to.equal(1);
+					done();
+				});
 			});
 
-			it('should work for array methods(but watch the array) even when they are accessed with square bracket syntax', function(){
-				//TODO implement
+			it('should work for array methods(but watch the array) even when they are accessed with square bracket syntax', function(done){
+				prepareFakeComponent(function() {
+					return <ul>{store.arr['map']((number)=>{
+						<li key={number}>{number}</li>
+					})}</ul>;
+				})();
+
+				store.arr.push(store.arr.length + 1);
+				setTimeout(function(){
+					expect(comp.forceUpdate.callCount).to.equal(1);
+					done();
+				});
 			});
 		});
 
@@ -84,7 +115,7 @@ describe('react-observe-store', function() {
 	});
 	
 	describe('multiple components using one store', function() {
-		it('should only create one one observer if two components are observing the same path', function(){
+		it('should only create one observer if two components are observing the same path', function(){
 		    //TODO implement(not even implemented in the algorithm itself)
 		});
 		
