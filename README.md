@@ -1,10 +1,28 @@
 # react-observe-store
 a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component
 
+## Usage
+Install with JSPM: `jspm i github:capaj/react-observe-store`
+
+```javascript
+import observeStore from 'react-observe-store';
+import React from 'react';
+const store = {a: 1, b:2, c:4};	//or import store from another file
+
+export default class About extends React.Component {
+  constructor(...props) {
+    observeStore(About, store, 'store');
+  }
+  render() {
+    return <div>{store.b}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
+  }
+}
+
+```
 ## Does it work?
 Yes, it is thouroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
 For example:
-```
+```javascript
 const store = {a: 1, b:2, c:4};
 ...
 constructor(){
