@@ -1,5 +1,5 @@
 # react-observe-store
-a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component
+a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component. Based on https://github.com/polymer/observe-js
 
 ## Usage
 Install with JSPM: `jspm i github:capaj/react-observe-store`
