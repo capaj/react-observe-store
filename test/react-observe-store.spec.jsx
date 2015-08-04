@@ -9,43 +9,45 @@ describe('react-observe-store', function() {
 	var comp;
 	var store;
 	var prepareFakeComponent = function(renderFn){
-		return function() {
-			store = {
-				c: 0,
-				arr: [0, 1],
-				obj: {
-					count: 0
-				}
-			};
+    store = {
+      c: 0,
+      arr: [0, 1],
+      obj: {
+        count: 0
+      },
+      d: 2,
+      prop: 'a'
+    };
 
-			comp = {
-				forceUpdate: sinon.spy(),
-				render: renderFn
-			};
-			observeStore(comp, store, 'store');
-		};
+    comp = {
+      forceUpdate: sinon.spy(),
+      render: renderFn
+    };
+    observeStore(comp, store, 'store');
 	};
+  var renderNormallyComplex = function() {
+    var style = {prop: store.d, size: 20};
+    style[store.prop] = 15;
+    return <div>
+      <span>counter is {store.c}</span>
+      <button onClick={this.increment}>Increment</button>
+      <button onClick={this.decrement}>Decrement</button>
+      <br/>
+      <span>arr has {store.arr}</span>
+      <button onClick={this.push}>push</button>
+      <button onClick={this.pop}>pop</button>
+      <br/>
+      <span>obj is {JSON.stringify(store.obj)}</span>
+      <button onClick={this.incrementObj}>Increment object prop</button>
+      <button onClick={this.decrementObj}>Decrement object prop</button>
+
+    </div>;
+  };
 	describe('calling forceUpdate on a component', function() {
 
-		beforeEach(prepareFakeComponent(function() {
-			return <div>
-				<span>counter is {store.c}</span>
-				<button onClick={this.increment}>Increment</button>
-				<button onClick={this.decrement}>Decrement</button>
-				<br/>
-				<span>arr has {store.arr}</span>
-				<button onClick={this.push}>push</button>
-				<button onClick={this.pop}>pop</button>
-				<br/>
-				<span>obj is {JSON.stringify(store.obj)}</span>
-				<button onClick={this.incrementObj}>Increment object prop</button>
-				<button onClick={this.decrementObj}>Decrement object prop</button>
-
-			</div>;
-		}));
-
 		it('should work for simple values', function(done) {
-			store.c += 1;
+      prepareFakeComponent(renderNormallyComplex);
+      store.c += 1;
 			store.c += 1;	//will trigger only one, we don't want to force update multiple times in this case
 
 			setTimeout(function(){
@@ -59,48 +61,72 @@ describe('react-observe-store', function() {
 			});
 		});
 		it('should work for objects', function(done) {
-			store.obj.count += 1;
+      prepareFakeComponent(renderNormallyComplex);
+      store.obj.count += 1;
 			setTimeout(function(){
 				expect(comp.forceUpdate.callCount).to.equal(1);
 				done();
 			});
 		});
+
+    it('should work when store used inside an object literal', function(done) {
+      prepareFakeComponent(renderNormallyComplex);
+
+      store.d += 1;
+      setTimeout(function() {
+        expect(comp.forceUpdate.callCount).to.equal(1);
+        done();
+      });
+    });
+
+    it('should register when store used as a key within bracket notation', function(done){
+      prepareFakeComponent(renderNormallyComplex);
+
+      store.prop = 'b';
+      setTimeout(function() {
+        expect(comp.forceUpdate.callCount).to.equal(1);
+        done();
+      });
+    });
+
 		describe('arrays', function() {
 			it('should work for arrays', function(done) {
-				store.arr.push(store.arr.length + 1);
+        prepareFakeComponent(renderNormallyComplex);
+
+        store.arr.push(store.arr.length + 1);
 				setTimeout(function(){
 					expect(comp.forceUpdate.callCount).to.equal(1);
 					done();
 				});
 			});
 
-			it('should work for array method map(but watch the array)', function(done){
-				prepareFakeComponent(function() {
-					return <ul>{store.arr.map((number)=>{
-						<li key={number}>{number}</li>
-					})}</ul>;
-				})();
+      it('should work for array method map(but watch the array)', function(done) {
+        prepareFakeComponent(function() {
+          return <ul>{store.arr.map((number)=> {
+            <li key={number}>{number}</li>
+          })}</ul>;
+        });
 
-				store.arr.push(store.arr.length + 1);
-				setTimeout(function(){
-					expect(comp.forceUpdate.callCount).to.equal(1);
-					done();
-				});
-			});
+        store.arr.push(store.arr.length + 1);
+        setTimeout(function() {
+          expect(comp.forceUpdate.callCount).to.equal(1);
+          done();
+        });
+      });
 
-			it('should work for array methods(but watch the array) even when they are accessed with square bracket syntax', function(done){
-				prepareFakeComponent(function() {
-					return <ul>{store.arr['map']((number)=>{
-						<li key={number}>{number}</li>
-					})}</ul>;
-				})();
+      it('should work for array methods(but watch the array) even when they are accessed with square bracket syntax', function(done) {
+        prepareFakeComponent(function() {
+          return <ul>{store.arr['map']((number)=> {
+            <li key={number}>{number}</li>
+          })}</ul>;
+        });
 
-				store.arr.push(store.arr.length + 1);
-				setTimeout(function(){
-					expect(comp.forceUpdate.callCount).to.equal(1);
-					done();
-				});
-			});
+        store.arr.push(store.arr.length + 1);
+        setTimeout(function() {
+          expect(comp.forceUpdate.callCount).to.equal(1);
+          done();
+        });
+      });
 		});
 
 	});

@@ -1,5 +1,5 @@
 # react-observe-store
-a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component. Based on https://github.com/polymer/observe-js
+a function, which uses a regex to match store paths/properties accessed in render function, observe them and call render on your component. Observation is based on https://github.com/polymer/observe-js
 
 ## Usage
 Install with JSPM: `jspm i github:capaj/react-observe-store`
@@ -20,7 +20,9 @@ export default class About extends React.Component {
 
 ```
 ## Does it work?
-Yes, it is thouroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
+
+Yes, it is thoroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
+
 For example:
 ```javascript
 const store = {a: 1, b:2, c:4};
@@ -37,5 +39,16 @@ render(){
 Even when a store variable is not observed automatically, you can always import `observe-js` and use it to manually subscribe.
 I find that utilizing Object.observe for forcingUpdates on components greatly reduces the overall complexity of my react apps.
 
+## Know issue
+
+React hot loader api replaces your render methods with a cached function, so we cannot inspect the original render method. Be aware. Fix is easy, but I am not sure when it will be merged.
+
 ## Contributing
 Do you have a bug or feature request? Feel free ask, post a bug or better yet a PR!
+
+Running tests:
+```
+npm i
+npm run serve
+```
+Then just go to http://localhost:3000/test/ and let them a second or more to pass.

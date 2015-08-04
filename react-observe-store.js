@@ -12,8 +12,9 @@ import stripLastPropertyAcessor from './util/stripLastPropertyAcessor'
  */
 export default function observeStore(comp, store, varName){
 
-	const reg = new RegExp(varName + '.*?(?=\\)|\\()', 'ig');
-	const storeAcessors = comp.render.toString().match(reg);
+	const reg = new RegExp(varName + '.*?(?=\\)|]|,|\\()', 'ig');
+  const toString = comp.render.toString();
+  const storeAccessors = toString.match(reg);
 	const observersByPaths = {};
 
 	/**
@@ -32,10 +33,18 @@ export default function observeStore(comp, store, varName){
 			//console.log('registered an observer for path', path);
 		}
 	};
-	if (storeAcessors) {
-		storeAcessors.forEach((path) => {
+	if (storeAccessors) {
+    //console.log("storeAccessors", storeAccessors);
+		storeAccessors.forEach((path) => {
 			path = path.substr(varName.length + 1);
-			const pathObj = Path.get(path);
+			let pathObj = Path.get(path);
+      if (!pathObj.valid) {
+        path = path + ']';
+        pathObj = Path.get(path);
+      }
+      if (!pathObj.valid) {
+        return;
+      }
 			const val = pathObj.getValueFrom(store);
 			const type = typeof val;
 			let createObserver;
