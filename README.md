@@ -19,8 +19,28 @@ export default class About extends React.Component {
     return <div>{store.b}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
   }
 }
-
 ```
+or you can utilize a helper method for observing multiple stores
+```javascript
+import {componentObserveStores} from 'react-observe-store';
+import React from 'react';
+const storeA = {a: 1, b:2, c:4};	//or import store from another file
+const storeB = {a: 0, b:10, c:5};
+
+export default class About extends React.Component {
+  constructor(...props) {
+    this.observedStores = {
+      storeA: storeA,
+      storeB: storeB
+    },
+    componentObserveStores(this);
+  }
+  render() {
+    return <div>{storeA.b}{storeB.c}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
+  }
+}
+```
+
 ## Does it work?
 
 Yes, it is thoroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
