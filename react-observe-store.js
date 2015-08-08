@@ -81,12 +81,14 @@ export function observeStore(comp, store, varName, renderMethod){
 			observePath(path, createObserver);
 		});
 
-		var originalUnmount = comp.componentWillUnmount;
+		const originalUnmount = comp.componentWillUnmount;
 		comp.componentWillUnmount = function() {
 			Object.keys(observersByPaths).forEach((path)=>{
 				observersByPaths[path].close();
 			});
-			originalUnmount.apply(comp, arguments);
+      if (originalUnmount) {
+        originalUnmount.apply(comp, arguments);
+      }
 		}
 	}
 }

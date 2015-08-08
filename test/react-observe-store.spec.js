@@ -158,7 +158,25 @@ describe('react-observe-store', function() {
 		});
 
 	});
-
+  
+  it('should replace componentWillUnmount method and call original componentWillUnmount when called', function(){
+    var unmountSpy = sinon.spy();
+    comp = {
+      forceUpdate: sinon.spy(),
+      observedStores: {
+        store: store
+      },
+      render: function() {
+        return <div>{store.c}</div>;
+      },
+      componentWillUnmount: unmountSpy
+    };
+    componentObserveStores(comp);
+    expect(comp.componentWillUnmount === unmountSpy).to.be.false;
+    comp.componentWillUnmount();
+    expect(unmountSpy.callCount).to.equal(1);
+  });
+  
 	describe('regex matcher', function() {
 		it('should match when accessing a prop by index(brackets)', function() {
 
