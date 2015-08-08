@@ -1,5 +1,6 @@
 # react-observe-store
-a small utility which uses a regex to match store paths/properties accessed in render function, observe them and call render on your component. Observation is based on https://github.com/polymer/observe-js
+a small utility which uses a regex to match store paths/properties accessed in render function, observe them and call render on your component. Observation is based on https://github.com/polymer/observe-js.
+
 This can make you independent from Flux or any other event emitter based solution for state management.
 
 ## Usage
