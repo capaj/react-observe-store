@@ -39,6 +39,9 @@ render(){
 When a store variable is not known before runtime, you can always import `observe-js` and use it to manually observe a path known at runtime.
 I find that utilizing Object.observe for keeping my view in sync greatly reduces the overall complexity of my react apps. No need for Flux, Reflux or even Redux.
 
+### Browser support
+the same as (observe-js)[https://github.com/polymer/observe-js], so anything newer than IE9. If Object.observe is not available, it uses dirty checking.
+
 ## Know issue
 
 React hot loader api replaces your render methods with a cached function, so we cannot inspect the original render method. Be aware. Fix is easy, but I am not sure when it will be merged.
