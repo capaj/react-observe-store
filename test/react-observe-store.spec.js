@@ -1,9 +1,9 @@
 import chai from 'chai';
-import observeStore from '../react-observe-store';
+import {componentObserveStores, observeStore} from '../react-observe-store';
 import sinon from 'sinon';
 var expect = chai.expect;
 
-import stripLastPropertyAcessorSpec from './util/stripLastPropertyAcessor.spec';
+import './util/stripLastPropertyAcessor.spec';
 
 describe('react-observe-store', function() {
 	var comp;
@@ -21,9 +21,12 @@ describe('react-observe-store', function() {
 
     comp = {
       forceUpdate: sinon.spy(),
+      observedStores: {
+        store: store
+      },
       render: renderFn
     };
-    observeStore(comp, store, 'store');
+    componentObserveStores(comp); //the short and easy way of using this library
 	};
   var renderNormallyComplex = function() {
     var style = {prop: store.d, size: 20};
@@ -44,6 +47,31 @@ describe('react-observe-store', function() {
     </div>;
   };
 	describe('calling forceUpdate on a component', function() {
+
+    it('should work for manually inputted render methods', function(done){
+      store = {
+        c: 0
+      };
+
+      comp = {
+        forceUpdate: sinon.spy(),
+        renderCustom: renderNormallyComplex
+      };
+      observeStore(comp, store, 'store', comp.renderCustom);  //the long way of specifying how to observe the store
+
+      store.c += 1;
+      store.c += 1;	//will trigger only one, we don't want to force update multiple times in this case
+
+      setTimeout(function(){
+        expect(comp.forceUpdate.callCount).to.equal(1);
+        store.c += 1;
+
+        setTimeout(function(){
+          expect(comp.forceUpdate.callCount).to.equal(2);
+          done();
+        });
+      });
+    });
 
 		it('should work for simple values', function(done) {
       prepareFakeComponent(renderNormallyComplex);

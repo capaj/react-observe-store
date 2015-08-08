@@ -9,11 +9,15 @@ import stripLastPropertyAcessor from './util/stripLastPropertyAcessor'
  * @param {Object} comp react component
  * @param {Object} store object you use to store state in
  * @param {String} varName variable name that you have for the store in the component render function
+ * @param {Function} [renderMethod=comp.render] when specified, will try to match store accessors in it rather than in comp.render
  */
-export default function observeStore(comp, store, varName){
+export function observeStore(comp, store, varName, renderMethod){
 
-	const reg = new RegExp(varName + '.*?(?=\\)|]|,|\\()', 'ig');
-  const toString = comp.render.toString();
+	const reg = new RegExp(varName + '.*?(?=\\)|\n|]|,|\\()', 'ig');
+  if (!renderMethod) {
+    renderMethod = comp.render;
+  }
+  const toString = renderMethod.toString();
   const storeAccessors = toString.match(reg);
 	const observersByPaths = {};
 
@@ -85,4 +89,13 @@ export default function observeStore(comp, store, varName){
 			originalUnmount.apply(comp, arguments);
 		}
 	}
+}
+
+/**
+ * @param {Object} comp react component with observedStores property
+ */
+export function componentObserveStores(comp) {
+  Object.keys(comp.observedStores).forEach(function (storeName){
+      observeStore(comp, comp.observedStores[storeName], storeName);
+  });
 }

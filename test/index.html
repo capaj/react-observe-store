@@ -9,13 +9,10 @@
 <script src="/jspm_packages/system.js"></script>
 <script src="/config.js"></script>
 <script>
-	System.config({
-		baseURL: '../'
-	});
 	System.import('mocha').then(function(mocha){
 
 		mocha.setup('bdd');
-		System.import('test/react-observe-store.spec.jsx!').then(function() {
+		System.import('test/react-observe-store.spec').then(function() {
 
 			if (window.mochaPhantomJS) {
 				mochaPhantomJS.run();

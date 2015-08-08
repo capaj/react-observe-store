@@ -5,7 +5,7 @@ a function, which uses a regex to match store paths/properties accessed in rende
 Install with JSPM: `jspm i github:capaj/react-observe-store`
 
 ```javascript
-import observeStore from 'react-observe-store';
+import {observeStore} from 'react-observe-store';
 import React from 'react';
 const store = {a: 1, b:2, c:4};	//or import store from another file
 
@@ -36,8 +36,8 @@ render(){
 	return <div>{store['b']}</div>	//works, automagically observes
 }
 ```
-Even when a store variable is not observed automatically, you can always import `observe-js` and use it to manually subscribe.
-I find that utilizing Object.observe for forcingUpdates on components greatly reduces the overall complexity of my react apps.
+When a store variable is not known before runtime, you can always import `observe-js` and use it to manually observe a path known at runtime.
+I find that utilizing Object.observe for keeping my view in sync greatly reduces the overall complexity of my react apps. No need for Flux, Reflux or even Redux.
 
 ## Know issue
 
