@@ -6,6 +6,7 @@ This can make you independent from Flux or any other event emitter based solutio
 ## Usage
 Install with JSPM: `jspm i github:capaj/react-observe-store`
 
+then just simply call observeStore in the constructor:
 ```javascript
 import {observeStore} from 'react-observe-store';
 import React from 'react';
@@ -13,7 +14,8 @@ const store = {a: 1, b:2, c:4};	//or import store from another file
 
 export default class About extends React.Component {
   constructor(...props) {
-    observeStore(About, store, 'store');
+    super(...props);
+    observeStore(this, store, 'store');
   }
   render() {
     return <div>{store.b}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
@@ -41,6 +43,11 @@ export default class About extends React.Component {
 }
 ```
 
+By default, observeStore looks at the render method, but you can pass any function as 4th argument to statically analyse
+```javascript
+observeStore(this, store, 'store', anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass optionally a function which you want to statically check for store usages
+```
+
 ## Does it work?
 
 Yes, it is thoroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
@@ -62,7 +69,7 @@ When a store variable is not known before runtime, you can always import `observ
 I find that utilizing Object.observe for keeping my view in sync greatly reduces the overall complexity of my react apps. No need for Flux, Reflux or even Redux.
 
 ### Browser support
-the same as (observe-js)[https://github.com/polymer/observe-js], so anything newer than IE9. If Object.observe is not available, it uses dirty checking.
+the same as [observe-js](https://github.com/polymer/observe-js), so anything newer than IE9. If Object.observe is not available, it uses dirty checking.
 
 ## Know issue
 
