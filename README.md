@@ -31,10 +31,7 @@ const storeB = {a: 0, b:10, c:5};
 
 export default class About extends React.Component {
   constructor(...props) {
-    this.observedStores = {
-      storeA: storeA,
-      storeB: storeB
-    },
+    this.observedStores = [()=> storeA, ()=> storeB],
     componentObserveStores(this);
   }
   render() {
@@ -45,7 +42,7 @@ export default class About extends React.Component {
 
 By default, observeStore looks at the render method, but you can pass any function as 4th argument to statically analyse
 ```javascript
-observeStore(this, store, 'store', anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass optionally a function which you want to statically check for store usages
+observeStore(this, ()=> store, anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass optionally a function which you want to statically check for store usages
 ```
 
 ## Does it work?

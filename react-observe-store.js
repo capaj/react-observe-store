@@ -7,18 +7,21 @@ const Path = observe.Path;
 import stripLastPropertyAcessor from './util/stripLastPropertyAcessor'
 /**
  * @param {Object} comp react component
- * @param {Object} store object you use to store state in
- * @param {String} varName variable name that you have for the store in the component render function
+ * @param {Function} store object you use to store state in
  * @param {Function} [renderMethod=comp.render] when specified, will try to match store accessors in it rather than in comp.render
  */
-export function observeStore(comp, store, varName, renderMethod){
-
-	const reg = new RegExp(varName + '.*?(?=\\)|\n|]|,|\\()', 'ig');
+export function observeStore(comp, storeGetter, renderMethod){
+  const store = storeGetter();
+  var entire = storeGetter.toString();
+  const varName = entire
+    .substring(entire.indexOf('return ') + 7, entire.lastIndexOf("}"))
+    .replace(';', '').trim();
+	const reg = new RegExp('\\b' + varName + '\\..*?(?=\\)|\n|]|,|\\()', 'ig');
   if (!renderMethod) {
     renderMethod = comp.render;
   }
-  const toString = renderMethod.toString();
-  const storeAccessors = toString.match(reg);
+  const stringifiedRenderMethod = renderMethod.toString();
+  const storeAccessors = stringifiedRenderMethod.match(reg);
 	const observersByPaths = {};
 
 	/**
@@ -97,7 +100,7 @@ export function observeStore(comp, store, varName, renderMethod){
  * @param {Object} comp react component with observedStores property
  */
 export function componentObserveStores(comp) {
-  Object.keys(comp.observedStores).forEach(function (storeName){
-      observeStore(comp, comp.observedStores[storeName], storeName);
+  comp.observedStores.forEach(function (storeGetter){
+      observeStore(comp, storeGetter);
   });
 }

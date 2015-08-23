@@ -21,9 +21,7 @@ describe('react-observe-store', function() {
 
     comp = {
       forceUpdate: sinon.spy(),
-      observedStores: {
-        store: store
-      },
+      observedStores: [()=> store],
       render: renderFn
     };
     componentObserveStores(comp); //the short and easy way of using this library
@@ -57,7 +55,7 @@ describe('react-observe-store', function() {
         forceUpdate: sinon.spy(),
         renderCustom: renderNormallyComplex
       };
-      observeStore(comp, store, 'store', comp.renderCustom);  //the long way of specifying how to observe the store
+      observeStore(comp, ()=> store, comp.renderCustom);  //the long way of specifying how to observe the store
 
       store.c += 1;
       store.c += 1;	//will trigger only one, we don't want to force update multiple times in this case
@@ -163,9 +161,7 @@ describe('react-observe-store', function() {
     var unmountSpy = sinon.spy();
     comp = {
       forceUpdate: sinon.spy(),
-      observedStores: {
-        store: store
-      },
+      observedStores: [()=> store],
       render: function() {
         return <div>{store.c}</div>;
       },

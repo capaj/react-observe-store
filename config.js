@@ -1,8 +1,8 @@
 System.config({
-  "baseURL": "../",
-  "defaultJSExtensions": true,
-  "transpiler": "babel",
-  "babelOptions": {
+  baseURL: "../",
+  defaultJSExtensions: true,
+  transpiler: "babel",
+  babelOptions: {
     "blacklist": [],
     "stage": 0,
     "optional": [
@@ -11,18 +11,16 @@ System.config({
       "runtime"
     ]
   },
-  "paths": {
+  paths: {
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
-  }
-});
+  },
 
-System.config({
-  "map": {
-    "babel": "npm:babel-core@5.8.21",
+  map: {
+    "babel": "npm:babel-core@5.8.22",
     "babel-runtime": "npm:babel-runtime@5.8.20",
     "chai": "npm:chai@3.2.0",
-    "core-js": "npm:core-js@0.9.18",
+    "core-js": "npm:core-js@1.1.1",
     "mocha": "npm:mocha@2.2.5",
     "observe-js": "github:Polymer/observe-js@0.5.6",
     "sinon": "npm:sinon@1.15.4",
@@ -51,7 +49,7 @@ System.config({
       "systemjs-json": "github:systemjs/plugin-json@0.1.0",
       "type-detect": "npm:type-detect@1.0.0"
     },
-    "npm:core-js@0.9.18": {
+    "npm:core-js@1.1.1": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
@@ -83,4 +81,3 @@ System.config({
     }
   }
 });
-
