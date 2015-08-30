@@ -45,6 +45,11 @@ By default, observeStore looks at the render method, but you can pass any functi
 observeStore(this, ()=> store, anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass optionally a function which you want to statically check for store usages
 ```
 
+Lastly, there is a lower level API method available, which you can use when your store is appearing in render method by a different identifier, like [here](https://github.com/capaj/postuj-hovna/blob/master/www/components/profile.jsx#L19) for example:
+```javascript
+observeStoreByString(this, store, 'this.prop', anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass an exact string by which you reference it in your render method
+```
+
 ## Does it work?
 
 Yes, it is thoroughly tested and it does work, with a caveat that it can't determine a path to watch if you're accessing the member via a variable resolved in render time.
@@ -77,6 +82,7 @@ Do you have a bug or feature request? Feel free ask, post a bug or better yet a 
 
 Running tests:
 ```
+npm i browser-sync -g $#
 npm i
 npm run serve
 ```

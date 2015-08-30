@@ -153,6 +153,10 @@ describe('react-observe-store', function() {
           done();
         });
       });
+
+      it('should work with this.prop as an observed identifier', function(){
+          //todo
+      });
 		});
 
 	});
