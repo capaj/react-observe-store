@@ -3,6 +3,7 @@ const PathObserver = observe.PathObserver;
 const ArrayObserver = observe.ArrayObserver;
 const ObjectObserver = observe.ObjectObserver;
 const Path = observe.Path;
+import cloneDeep from 'lodash.clonedeep';
 
 import stripLastPropertyAcessor from './util/stripLastPropertyAcessor'
 
@@ -35,6 +36,7 @@ export function observeStoreByString(comp, store, varName, renderMethod) {
       observersByPaths[path] = obs;
 
       obs.open(() => {
+        console.log('store snapshot', cloneDeep(store));1
         comp.forceUpdate();
       });
 
