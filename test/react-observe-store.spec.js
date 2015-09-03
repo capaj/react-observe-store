@@ -1,7 +1,7 @@
 import chai from 'chai';
 import {componentObserveStores, observeStore} from '../react-observe-store';
 import sinon from 'sinon';
-var expect = chai.expect;
+const expect = chai.expect;
 
 import './util/stripLastPropertyAcessor.spec';
 

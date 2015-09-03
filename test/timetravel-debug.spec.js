@@ -1,3 +1,6 @@
+import chai from 'chai';
+const expect = chai.expect;
+
 describe('timetravel-debug', function() {
     it('should only be available when localStorage value timetravel is true', function(){
         ;
