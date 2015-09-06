@@ -36,10 +36,8 @@ export function observeStoreByString(comp, store, varName, renderMethod) {
       observersByPaths[path] = obs;
 
       obs.open(() => {
-        console.log('store snapshot', cloneDeep(store));1
         comp.forceUpdate();
       });
-
       //console.log('registered an observer for path', path);
     }
   };
@@ -95,7 +93,9 @@ export function observeStoreByString(comp, store, varName, renderMethod) {
       if (originalUnmount) {
         originalUnmount.apply(comp, arguments);
       }
-    }
+    };
+
+    return observersByPaths;
   }
 }
 
