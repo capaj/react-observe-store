@@ -4,7 +4,6 @@
   "description": "a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component",
   "main": "react-observe-store.js",
   "scripts": {
-    "postinstall": "jspm i -d",
     "prepush": "npm test",
     "serve": "node_modules/.bin/browser-sync start --server --files=\"test/*.*\" --no-open",
     "test": "node_modules/.bin/mocha-phantomjs http://localhost:3000/test/"
