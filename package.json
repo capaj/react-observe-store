@@ -1,6 +1,6 @@
 {
   "name": "react-observe-store",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "a function, which tries to match store paths/properties accessed in render function, observe them and call render on your component",
   "main": "react-observe-store.js",
   "scripts": {
@@ -41,5 +41,8 @@
     "browser-sync": "^2.7.12",
     "mocha-phantomjs": "^3.6.0",
     "phantomjs": "^1.9.7-15"
+  },
+  "dependencies": {
+    "observe-js": "^0.4.2"
   }
 }

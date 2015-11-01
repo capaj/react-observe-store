@@ -5,49 +5,50 @@ This can make you independent from Flux or any other event emitter based solutio
 
 ## Usage
 Install with JSPM: `jspm i github:capaj/react-observe-store`
+Install with NPM(written in es6, so requires babel): `npm react-observe-store`
 
 then just simply call observeStore in the constructor:
 ```javascript
-import {observeStore} from 'react-observe-store';
-import React from 'react';
-const store = {a: 1, b:2, c:4};	//or import store from another file
+import {observeStore} from 'react-observe-store'
+import React from 'react'
+const store = {a: 1, b:2, c:4}	//or import store from another file
 
 export default class About extends React.Component {
   constructor(...props) {
-    super(...props);
-    observeStore(this, store, 'store');
+    super(...props)
+    observeStore(this, store, 'store')
   }
   render() {
-    return <div>{store.b}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
+    return <div>{store.b}</div>	//observes store.b for changes and automatically rerenders when it's value changes
   }
 }
 ```
 or you can utilize a helper method for observing multiple stores
 ```javascript
-import {componentObserveStores} from 'react-observe-store';
-import React from 'react';
-const storeA = {a: 1, b:2, c:4};	//or import store from another file
-const storeB = {a: 0, b:10, c:5};
+import {componentObserveStores} from 'react-observe-store'
+import React from 'react'
+const storeA = {a: 1, b:2, c:4}	//or import store from another file
+const storeB = {a: 0, b:10, c:5}
 
 export default class About extends React.Component {
   constructor(...props) {
     this.observedStores = [()=> storeA, ()=> storeB],
-    componentObserveStores(this);
+    componentObserveStores(this)
   }
   render() {
-    return <div>{storeA.b}{storeB.c}</div>;	//observes store.b for changes and automatically rerenders when it's value changes
+    return <div>{storeA.b}{storeB.c}</div>	//observes store.b for changes and automatically rerenders when it's value changes
   }
 }
 ```
 
 By default, observeStore looks at the render method, but you can pass any function as 4th argument to statically analyse
 ```javascript
-observeStore(this, ()=> store, anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass optionally a function which you want to statically check for store usages
+observeStore(this, ()=> store, anyFunctionWhichUsesTheStoreToRenderElements)	//you can pass optionally a function which you want to statically check for store usages
 ```
 
 Lastly, there is a lower level API method available, which you can use when your store is appearing in render method by a different identifier, like [here](https://github.com/capaj/postuj-hovna/blob/master/www/components/profile.jsx#L19) for example:
 ```javascript
-observeStoreByString(this, store, 'this.prop', anyFunctionWhichUsesTheStoreToRenderElements);	//you can pass an exact string by which you reference it in your render method
+observeStoreByString(this, store, 'this.prop', anyFunctionWhichUsesTheStoreToRenderElements)	//you can pass an exact string by which you reference it in your render method
 ```
 
 ## Does it work?
@@ -56,10 +57,10 @@ Yes, it is thoroughly tested and it does work, with a caveat that it can't deter
 
 For example:
 ```javascript
-const store = {a: 1, b:2, c:4};
+const store = {a: 1, b:2, c:4}
 ...
 constructor(){
-	this.myProp = 'b';
+	this.myProp = 'b'
 }
 render(){
 	return <div>{store[this.myProp]}</div>	//won't be observed automagically :-(
