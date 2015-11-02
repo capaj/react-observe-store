@@ -1,7 +1,11 @@
 # react-observe-store
+1. store your state in POJOs using the syntax you know by heart
+2. observe that state from components, if it changes, rerender
+3. profit
+
 a small utility which uses a regex to match store paths/properties accessed in render function, observe them and call render on your component. Observation is based on https://github.com/polymer/observe-js.
 
-This can make you independent from Flux or any other event emitter based solution for state management.
+This can make you independent from Flux or any other state management solution.
 
 ## Usage
 Install with JSPM: `jspm i github:capaj/react-observe-store`
