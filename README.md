@@ -1,7 +1,5 @@
 # react-observe-store
-1. store your state in POJOs using the syntax you know by heart
-2. observe that state from components, if it changes, rerender
-3. profit
+**Do not use this in production**. I'd made this when I was just experimenting with custom state management. While it might work for some usecases, it is not a solid library. If you need simple scalable state mangement based on observables use [MobX](https://github.com/mobxjs/mobx).
 
 a small utility which uses a regex to match store paths/properties accessed in render function, observe them and call render on your component. Observation is based on https://github.com/polymer/observe-js.
 
